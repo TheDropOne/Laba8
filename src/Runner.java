@@ -6,10 +6,10 @@ import java.util.*;
  */
 public class Runner {
 
-    private static final String INPUT_FILE_NAME = "juice.in";
-    private static final String OUTPUT1_FILE_NAME = "juice1.out";
-    private static final String OUTPUT2_FILE_NAME = "juice2.out";
-    private static final String OUTPUT3_FILE_NAME = "juice3.out";
+    private static final String INPUT_FILE_NAME = "juice.txt";
+    private static final String OUTPUT1_FILE_NAME = "juice1.txt";
+    private static final String OUTPUT2_FILE_NAME = "juice2.txt";
+    private static final String OUTPUT3_FILE_NAME = "juice3.txt";
 
     public static void main(String[] args) {
         List<String> listOfStrings = readListOfStrings(INPUT_FILE_NAME);
@@ -27,13 +27,36 @@ public class Runner {
         componentsSet.addAll(components);
         writeToFile(OUTPUT1_FILE_NAME, componentsSet.iterator());
         //TASK 2
-        Collections.sort(components, (o1, o2) -> {
-            if (o1.length() < o2.length()) return -1;
-            if (o1.length() > o2.length()) return 1;
-            return o1.compareTo(o2);
-        });
-        writeToFile(OUTPUT2_FILE_NAME,components.iterator());
-
+        (new Thread(() -> {
+            Collections.sort(components, (o1, o2) -> {
+                if (o1.length() < o2.length()) return -1;
+                if (o1.length() > o2.length()) return 1;
+                return o1.compareTo(o2);
+            });
+        })).run();
+        writeToFile(OUTPUT2_FILE_NAME, components.iterator());
+        //TASK 3
+        int minCount = 0;
+        (new Thread(() -> {
+            Collections.sort(juices, (juice1, juice2) -> {
+                Collections.sort(juice1.getIngredients());
+                Collections.sort(juice2.getIngredients());
+                if (juice1.getIngredients().get(0).charAt(0) < juice2.getIngredients().get(0).charAt(0)) return -1;
+                if (juice2.getIngredients().get(0).charAt(0) < juice2.getIngredients().get(0).charAt(0)) return -1;
+                return juice2.getIngredients().get(0).compareTo(juice2.getIngredients().get(0));
+            });
+        })).run();
+        for (int i = 0; i < juices.size() - 1; i++) {
+            boolean containsIngredients = false;
+            for (String component : juices.get(i).getIngredients()) {
+                if (juices.get(i + 1).getIngredients().contains(component)) {
+                    containsIngredients = true;
+                }
+            }
+            if (!containsIngredients) minCount++;
+        }
+        minCount++;
+        writeToFile(OUTPUT3_FILE_NAME, String.valueOf(minCount));
     }
 
     private static List<String> readListOfStrings(String path) {
@@ -77,4 +100,24 @@ public class Runner {
         }
     }
 
+    private static void writeToFile(String filename, String... s) {
+        FileWriter fw = null;
+        int iterator = 0;
+        try {
+            fw = new FileWriter(new File(filename));
+            while (s.length != iterator) {
+                fw.write(s[iterator]);
+                fw.write(System.lineSeparator());
+                iterator++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException | NullPointerException ex) {
+                System.out.println("Stream didn't closed or not exists. Reading from file failed. ");
+            }
+        }
+    }
 }
