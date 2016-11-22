@@ -6,10 +6,10 @@ import java.util.*;
  */
 public class Runner {
 
-    private static final String INPUT_FILE_NAME = "juice.txt";
-    private static final String OUTPUT1_FILE_NAME = "juice1.txt";
-    private static final String OUTPUT2_FILE_NAME = "juice2.txt";
-    private static final String OUTPUT3_FILE_NAME = "juice3.txt";
+    private static final String INPUT_FILE_NAME = "juice.in";
+    private static final String OUTPUT1_FILE_NAME = "juice1.out";
+    private static final String OUTPUT2_FILE_NAME = "juice2.out";
+    private static final String OUTPUT3_FILE_NAME = "juice3.out";
 
     public static void main(String[] args) {
         List<String> listOfStrings = readListOfStrings(INPUT_FILE_NAME);
