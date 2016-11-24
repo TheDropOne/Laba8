@@ -42,7 +42,7 @@ public class Runner {
                 Collections.sort(juice1.getIngredients());
                 Collections.sort(juice2.getIngredients());
                 if (juice1.getIngredients().get(0).charAt(0) < juice2.getIngredients().get(0).charAt(0)) return -1;
-                if (juice2.getIngredients().get(0).charAt(0) < juice2.getIngredients().get(0).charAt(0)) return -1;
+                if (juice1.getIngredients().get(0).charAt(0) > juice2.getIngredients().get(0).charAt(0)) return 1;
                 return juice2.getIngredients().get(0).compareTo(juice2.getIngredients().get(0));
             });
         })).run();
